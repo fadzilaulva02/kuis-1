@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Evaluasi Materi</title>
+    <style>
+        /* CSS: Mengatur tampilan agar menarik */
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
+        #game-container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 90%; max-width: 500px; text-align: center; }
+        .btn { display: block; width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background-color: #007bff; color: white; cursor: pointer; font-size: 16px; }
+        .btn:hover { background-color: #0056b3; }
+        #score-area { font-weight: bold; margin-top: 20px; color: #28a745; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="quiz">
+        <h2 id="question">Memuat soal...</h2>
+        <div id="answer-buttons"></div>
+    </div>
+    <div id="result" class="hidden">
+        <h2>Evaluasi Selesai!</h2>
+        <p id="final-score"></p>
+        <button class="btn" onclick="location.reload()">Ulangi Game</button>
+    </div>
+</div>
+
+<script>
+    // DATA SOAL (Bisa kamu ubah sesuai materi pelajaranmu)
+    const questions = [
+        { q: "Apa ibukota Indonesia saat ini?", a: ["Jakarta", "Bandung", "Surabaya"], correct: "Jakarta" },
+        { q: "Berapakah hasil dari 5 + 7?", a: ["10", "12", "14"], correct: "12" },
+        { q: "Warna campuran Biru dan Kuning adalah?", a: ["Ungu", "Cokelat", "Hijau"], correct: "Hijau" }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const questionElement = document.getElementById('question');
+    const answerButtonsElement = document.getElementById('answer-buttons');
+    const quizArea = document.getElementById('quiz');
+    const resultArea = document.getElementById('result');
+    const finalScoreElement = document.getElementById('final-score');
+
+    function startQuiz() {
+        showQuestion(questions[currentQuestionIndex]);
+    }
+
+    function showQuestion(questionData) {
+        questionElement.innerText = questionData.q;
+        answerButtonsElement.innerHTML = ''; // Hapus tombol sebelumnya
+        
+        questionData.a.forEach(answer => {
+            const button = document.createElement('button');
+            button.innerText = answer;
+            button.classList.add('btn');
+            button.onclick = () => selectAnswer(answer, questionData.correct);
+            answerButtonsElement.appendChild(button);
+        });
+    }
+
+    function selectAnswer(selected, correct) {
+        if (selected === correct) score++;
+        
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion(questions[currentQuestionIndex]);
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        quizArea.classList.add('hidden');
+        resultArea.classList.remove('hidden');
+        finalScoreElement.innerText = `Skor kamu: ${score} dari ${questions.length} soal benar!`;
+    }
+
+    startQuiz();
+</script>
+
+</body>
+</html>
